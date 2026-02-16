@@ -29,6 +29,8 @@ void HCU::process(void)
 	btn_down.process();
 	limit_sw_home.process();
 	CM.process();
+	
+	systick.delay_ms(100);
 }
 
 void HCU::handle_button_up(void)
