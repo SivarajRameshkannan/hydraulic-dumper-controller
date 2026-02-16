@@ -19,16 +19,14 @@ using namespace BOARD_CONFIG;
 
 // LL drivers
 static bsp_GPIO gpio_can_rx_led(CAN_RX_LED_GPIO, CAN_RX_LED_GPIO_GONFIG);
-static bsp_GPIO gpio_button(UP_BUTTON_GPIO, UP_BUTTON_GPIO_GONFIG);
 
 
 static SysTick SysTick;
 
 // devices
 static led led_can_rx(gpio_can_rx_led);
-static button btn_up(gpio_button, SysTick);
 
-static HCU hcu_instance(led_can_rx, btn_up, SysTick);
+static HCU hcu_instance(led_can_rx, SysTick);
 
 extern "C" void HCU_init_wrapper(void)
 {

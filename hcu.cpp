@@ -14,34 +14,12 @@
 void HCU::init(void) const
 {
 	can_rx_led.init();
-	
-	btn.init();
-	
 	g_logger.info(TAG, "initialized");
 }
 
 void HCU::process(void)
 {
-	btn.process();
-
-	switch(btn.read_state())
-	{
-		case button::btn_States::PRESSED:
-			can_rx_led.on();
-			g_logger.info(TAG, "button pressed");
-			break;
-		case button::btn_States::LONG_PRESS:
-			can_rx_led.off();
-			g_logger.info(TAG, "button long press detected");
-			break;
-		case button::btn_States::RELEASED:
-			can_rx_led.off();
-			g_logger.info(TAG, "button released");
-			break;		
-		default:
-			break;
-	}
-	
+	can_rx_led.toggle();	
 	systick.delay_ms(300);
 }
 

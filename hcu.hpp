@@ -20,9 +20,8 @@
 class HCU
 {
     public:
-        HCU(led& led, button& up, SysTick& systick)
+        HCU(led& led, SysTick& systick)
          : 	can_rx_led(led), 
-        	btn(up), 
         	systick(systick)
         	{}
         
@@ -43,12 +42,9 @@ class HCU
 		
 		// devices
         led& can_rx_led;
-        button& btn;
                 
         // services
         SysTick& systick; 
-        commandFrame rxBuffer;
-        Responseframe txBuffer;
 		
         void process(void);
         
