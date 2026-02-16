@@ -15,86 +15,34 @@ void HCU::init(void) const
 {
 	can_rx_led.init();
 	
-	btn_up.init();
-	btn_down.init();
-	limit_sw_home.init();
-	CM.init();
+	btn.init();
 	
 	g_logger.info(TAG, "initialized");
 }
 
 void HCU::process(void)
 {
-	btn_up.process();
-	btn_down.process();
-	limit_sw_home.process();
-	CM.process();
-}
+	btn.process();
 
-void HCU::handle_button_up(void)
-{
-	button::btn_States state = btn_up.read_state();
-	
-	switch(state)
+	switch(btn.read_state())
 	{
 		case button::btn_States::PRESSED:
-			break;
-		case button::btn_States::RELEASED:
+			can_rx_led.on();
+			g_logger.info(TAG, "button pressed");
 			break;
 		case button::btn_States::LONG_PRESS:
+			can_rx_led.off();
+			g_logger.info(TAG, "button long press detected");
 			break;
+		case button::btn_States::RELEASED:
+			can_rx_led.off();
+			g_logger.info(TAG, "button released");
+			break;		
 		default:
 			break;
 	}
-}
-
-void HCU::handle_button_down(void)
-{
-	button::btn_States state = btn_down.read_state();
 	
-	switch(state)
-	{
-		case button::btn_States::PRESSED:
-			break;
-		case button::btn_States::RELEASED:
-			break;
-		case button::btn_States::LONG_PRESS:
-			break;
-		default:
-			break;
-	}
-}
-
-void HCU::handle_limit_sw_home(void)
-{
-	button::btn_States state = limit_sw_home.read_state();
-	
-	switch(state)
-	{
-		case button::btn_States::PRESSED:
-			break;
-		case button::btn_States::RELEASED:
-			break;
-		case button::btn_States::LONG_PRESS:
-			break;
-		default:
-			break;
-	}
-}
-
-void HCU::handle_message(void)
-{ 
-	CM.read_msg(rxBuffer.get_buffer_addr());
-
-	switch(rxBuffer.get_id())
-	{
-		case commandFrame::ID::HYDRAULIC_COMMAND:
-			break;
-		case commandFrame::ID::SENSOR_REQUEST:
-			break;
-		default:
-			break;
-	}
+	systick.delay_ms(300);
 }
 
 void HCU::handle_hydraulic_cmds(commandFrame::HydraulicCommands hC)

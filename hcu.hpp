@@ -20,13 +20,10 @@
 class HCU
 {
     public:
-        HCU(led& led, button& up, button& down, button& home, hal_CAN& can, SysTick& systick)
+        HCU(led& led, button& up, SysTick& systick)
          : 	can_rx_led(led), 
-        	btn_up(up), 
-        	btn_down(down),
-        	limit_sw_home(home),
-        	systick(systick),
-        	CM(can)
+        	btn(up), 
+        	systick(systick)
         	{}
         
         ~HCU(void)
@@ -46,23 +43,17 @@ class HCU
 		
 		// devices
         led& can_rx_led;
-        button& btn_up;
-        button& btn_down;
-        button& limit_sw_home;
+        button& btn;
                 
         // services
         SysTick& systick; 
         commandFrame rxBuffer;
         Responseframe txBuffer;
-	    CAN_Manager<CAN_QUEUE_SIZE, FRAME_SIZE> CM; 
 		
         void process(void);
         
         // handle functions
         void handle_message(void);
-        void handle_button_up(void);
-        void handle_button_down(void);
-        void handle_limit_sw_home(void);
         
         void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);
         void handle_sensor_request(Sensor::Types sT);
