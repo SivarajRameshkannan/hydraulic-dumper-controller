@@ -43,7 +43,7 @@ class HCU
 			COUNT
 		};
 		
-        void init(void) const;
+        void init(void);
         void run(void);
 
     private:
@@ -68,13 +68,14 @@ class HCU
         Responseframe txBuffer;
 	    CAN_Manager<CAN_QUEUE_SIZE, FRAME_SIZE> CM; 
 		
+		// main process
         void process(void);
+        bool check_dumper_home_pos(void) const { return (this->limit_sw_home.read_state() == button::btn_States::PRESSED); };
         
         // handle functions
         void handle_message(void);
         void handle_button_up(void);
         void handle_button_down(void);
-        void handle_limit_sw_home(void);
         void handle_device_states(void);
         
         void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);

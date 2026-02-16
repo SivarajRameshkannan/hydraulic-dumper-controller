@@ -15,18 +15,18 @@
 #include <cstdint>
 #include <atomic>
 
+enum class CM_Status : uint8_t
+{
+	TX_BUFFER_FULL = 0U,
+	RX_BUFFER_EMPTY,
+	OK,
+	COUNT			
+};
+
 template<uint8_t queue_size, uint8_t frame_size>
 class CAN_Manager
 {
 	public:
-		enum class CM_Status : uint8_t
-		{
-			TX_BUFFER_FULL = 0U,
-			RX_BUFFER_EMPTY,
-			OK,
-			COUNT			
-		};
-		
 		using frame_type = std::array<uint8_t, frame_size>;
 		
 	    CAN_Manager(hal_CAN& CAN) 
