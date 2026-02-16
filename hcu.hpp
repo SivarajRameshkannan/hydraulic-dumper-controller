@@ -33,6 +33,16 @@ class HCU
         {
         };
 
+		enum class DeviceStates : uint8_t
+		{
+			MOVING_UP = 0U,
+			MOVING_DOWN,
+			MOVING_HOME,
+			IN_HOME,
+			STOPPED,
+			COUNT
+		};
+		
         void init(void) const;
         void run(void);
 
@@ -43,6 +53,8 @@ class HCU
 		static constexpr uint8_t CAN_QUEUE_SIZE = 10U;
 	    static constexpr uint8_t FRAME_SIZE = static_cast<uint8_t>(commandFrame::Frame::COUNT);
 		
+		// control states
+		DeviceStates curr_device_state;
 		
 		// devices
         led& can_rx_led;
@@ -63,6 +75,7 @@ class HCU
         void handle_button_up(void);
         void handle_button_down(void);
         void handle_limit_sw_home(void);
+        void handle_device_states(void);
         
         void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);
         void handle_sensor_request(Sensor::Types sT);

@@ -20,6 +20,8 @@ void HCU::init(void) const
 	limit_sw_home.init();
 	CM.init();
 	
+	systick.delay_ms(100);
+	
 	g_logger.info(TAG, "initialized");
 }
 
@@ -30,7 +32,29 @@ void HCU::process(void)
 	limit_sw_home.process();
 	CM.process();
 	
+	handle_button_up();
+	handle_button_down();
+	handle_limit_sw_home();
+	handle_device_states();
+	
 	systick.delay_ms(100);
+}
+
+void HCU::handle_device_states(void)
+{
+	switch(curr_device_state)
+	{
+		case DeviceStates::MOVING_UP:
+			break;
+		case DeviceStates::MOVING_DOWN:
+			break;
+		case DeviceStates::MOVING_HOME:
+			break;
+		case DeviceStates::STOPPED:
+			break;
+		default:
+			break;
+	}
 }
 
 void HCU::handle_button_up(void)
