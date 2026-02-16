@@ -10,7 +10,8 @@ class hal_Intruppt {
 public:
     using callback = void (*)(void*);
     
-    hal_Intruppt() = default;
+    hal_Intruppt() : _cb(nullptr), _ctx(nullptr){}
+  
     virtual ~hal_Intruppt(void) = default;
     virtual void register_intr_cb(callback cb, void* ctx)
     {
