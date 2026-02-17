@@ -6,6 +6,7 @@
  */
 #include "button.hpp"
 #include "hal_can.hpp"
+#include "hal_pwm_ctrl.hpp"
 #include "hcu.hpp"
 #include "led.hpp"
 #include "hal_gpio.hpp"
