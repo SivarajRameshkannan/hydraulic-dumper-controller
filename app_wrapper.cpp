@@ -16,7 +16,7 @@
 using namespace BOARD_CONFIG;
 
 // LL drivers
-static bsp_PWM pwm_ctrl(PWM_OUTPUT, PWM_CONFIG);
+static bsp_PWM pwm_ctrl(PWM_INFO);
 
 static SysTick SysTick;
 

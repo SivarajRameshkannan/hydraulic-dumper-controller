@@ -15,12 +15,18 @@ class hal_PWM
 	public:
 		hal_PWM() = default;
 		virtual ~hal_PWM() = default;
+
+		enum class PAIR
+		{
+			A = 0U,
+			B
+		};
 		
 		virtual void init(void) = 0;
 		virtual void start(void) = 0;
 		virtual void stop(void) = 0;
 		virtual void set_period(uint16_t period) = 0;
-		virtual void set_duty_cycle(uint8_t perc) = 0;
+		virtual void set_duty_cycle(uint8_t perc, PAIR p) = 0;
 	private:
 };
 

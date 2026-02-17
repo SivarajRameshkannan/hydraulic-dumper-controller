@@ -8,6 +8,7 @@
 #include "button.hpp"
 #include "command_frame.hpp"
 #include "hal_can.hpp"
+#include "hal_pwm_ctrl.hpp"
 #include "led.hpp"
 #include "logger.hpp"
 
@@ -22,11 +23,13 @@ void HCU::process(void)
 	if(duty_cycle > 99)
 	{
 		dir = false;
+		pwm.start();
 	}
 	
 	if(duty_cycle < 1)
 	{
 		dir = true;
+		pwm.stop();
 	}
 	
 	if(dir)
@@ -38,7 +41,7 @@ void HCU::process(void)
 		duty_cycle -= 1;
 	}
 	
-	pwm.set_duty_cycle(duty_cycle);
+	pwm.set_duty_cycle(duty_cycle, hal_PWM::PAIR::A);
 	g_logger.info(TAG, "Current Duty Cycle = %d", duty_cycle);
 	
 	systick.delay_ms(20);
