@@ -76,7 +76,10 @@ class HCU
 		
 		// main process
         void process(void);
-        bool check_dumper_home_pos(void) const { return (this->limit_sw_home.read_state() == button::btn_States::PRESSED); };
+        bool check_dumper_in_home_pos(void) const 
+        { 
+			return (this->limit_sw_home.read_state() != button::btn_States::RELEASED);
+		};
         
         // handle functions
         void handle_message(void);

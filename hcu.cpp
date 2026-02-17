@@ -23,7 +23,7 @@ void HCU::init(void)
 	
 	systick.delay_ms(100);
 	
-	if(!check_dumper_home_pos())
+	if(!check_dumper_in_home_pos())
 	{
 		curr_device_state = DeviceStates::MOVING_HOME;
 	}
@@ -57,7 +57,12 @@ void HCU::handle_events(void)
 {
 	if(curr_device_state == DeviceStates::MOVING_HOME)
 	{
-		return;
+	    if(btn_requested_state == DeviceStates::STOPPED ||
+	       can_requested_state == DeviceStates::STOPPED)
+	    {
+	        curr_device_state = DeviceStates::STOPPED;
+	    }
+	    return;
 	}
 	
 	if(btn_requested_state != DeviceStates::NONE)
@@ -68,8 +73,11 @@ void HCU::handle_events(void)
 		return;
 	}
 	
-	curr_device_state = can_requested_state;
-	can_requested_state = DeviceStates::NONE;
+	if(can_requested_state != DeviceStates::NONE)
+	{
+		curr_device_state = can_requested_state;
+		can_requested_state = DeviceStates::NONE;	
+	}
 }
 
 void HCU::handle_device_states(void)
@@ -106,6 +114,7 @@ void HCU::handle_button_up(void)
 			btn_requested_state = DeviceStates::MOVING_UP;
 			break;
 		case button::btn_States::RELEASED:
+			btn_requested_state = DeviceStates::STOPPED;
 			break;
 		case button::btn_States::LONG_PRESS:
 			btn_requested_state = DeviceStates::MOVING_DOWN;
@@ -125,6 +134,7 @@ void HCU::handle_button_down(void)
 			btn_requested_state = DeviceStates::MOVING_DOWN;
 			break;
 		case button::btn_States::RELEASED:
+			btn_requested_state = DeviceStates::STOPPED;
 			break;
 		case button::btn_States::LONG_PRESS:
 			btn_requested_state = DeviceStates::MOVING_DOWN;
@@ -213,7 +223,7 @@ void HCU::handle_moving_down(void)
 
 void HCU::handle_moving_home(void)
 {
-	if(check_dumper_home_pos())
+	if(check_dumper_in_home_pos())
 	{
 		curr_device_state = DeviceStates::IN_HOME;	
 	}
