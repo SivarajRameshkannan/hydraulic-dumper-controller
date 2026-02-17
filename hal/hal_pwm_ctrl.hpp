@@ -20,7 +20,7 @@ class hal_PWM
 		virtual void start(void) = 0;
 		virtual void stop(void) = 0;
 		virtual void set_period(uint16_t period) = 0;
-		virtual void set_duty_cycle(uint16_t perc) = 0;
+		virtual void set_duty_cycle(uint8_t perc) = 0;
 	private:
 };
 

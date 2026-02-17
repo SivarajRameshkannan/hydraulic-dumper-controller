@@ -5,29 +5,24 @@
  *      Author: Sivaraj
  */
 #include "button.hpp"
-#include "hal_can.hpp"
 #include "hal_pwm_ctrl.hpp"
 #include "hcu.hpp"
 #include "led.hpp"
-#include "hal_gpio.hpp"
 
-#include "bsp_gpio.hpp"
-#include "bsp_can.hpp"
-#include "Board_config.hpp"
+#include "bsp_pwm_ctrl.hpp"
 #include "systick.hpp"
+#include "Board_config.hpp"
 
 using namespace BOARD_CONFIG;
 
 // LL drivers
-static bsp_GPIO gpio_can_rx_led(CAN_RX_LED_GPIO, CAN_RX_LED_GPIO_GONFIG);
-
+static bsp_PWM pwm_ctrl(PWM_OUTPUT, PWM_CONFIG);
 
 static SysTick SysTick;
 
 // devices
-static led led_can_rx(gpio_can_rx_led);
 
-static HCU hcu_instance(led_can_rx, SysTick);
+static HCU hcu_instance(pwm_ctrl, SysTick);
 
 extern "C" void HCU_init_wrapper(void)
 {

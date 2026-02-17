@@ -13,48 +13,35 @@
 
 void HCU::init(void) const
 {
-	can_rx_led.init();
+	pwm.init();
 	g_logger.info(TAG, "initialized");
 }
 
 void HCU::process(void)
-{
-	can_rx_led.toggle();	
-	systick.delay_ms(300);
-}
-
-void HCU::handle_hydraulic_cmds(commandFrame::HydraulicCommands hC)
-{
-    switch(hC)
-    {
-        case commandFrame::HydraulicCommands::MOVE_UP:
-            break;
-        case commandFrame::HydraulicCommands::MOVE_DOWN:
-            break;
-        case commandFrame::HydraulicCommands::MOVE_HOME:
-            break;
-        default:
-            break;
-    }
-}
-
-void HCU::handle_sensor_request(Sensor::Types sT)
-{
-    switch(sT)
-    {
-        case Sensor::Types::VSENS:
-            break;
-        case Sensor::Types::TSENS:
-            break;
-        case Sensor::Types::ISENS:
-            break;
-        case Sensor::Types::PSENS:
-            break;
-        case Sensor::Types::LSENS:
-            break;
-        default:
-            break;
-    }
+{	
+	if(duty_cycle > 99)
+	{
+		dir = false;
+	}
+	
+	if(duty_cycle < 1)
+	{
+		dir = true;
+	}
+	
+	if(dir)
+	{
+		duty_cycle += 1;
+	}
+	else 
+	{
+		duty_cycle -= 1;
+	}
+	
+	pwm.set_duty_cycle(duty_cycle);
+	g_logger.info(TAG, "Current Duty Cycle = %d", duty_cycle);
+	
+	systick.delay_ms(20);
 }
 
 void HCU::run(void)

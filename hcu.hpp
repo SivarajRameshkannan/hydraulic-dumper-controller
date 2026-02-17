@@ -11,6 +11,7 @@
 #include "button.hpp"
 #include "can_manager.hpp"
 #include "hal_can.hpp"
+#include "hal_pwm_ctrl.hpp"
 #include "led.hpp"
 #include "hal_timer.hpp"
 #include "command_frame.hpp"
@@ -20,8 +21,10 @@
 class HCU
 {
     public:
-        HCU(led& led, SysTick& systick)
-         : 	can_rx_led(led), 
+        HCU(hal_PWM& _pwm, SysTick& systick)
+         : 	pwm(_pwm), 
+        	duty_cycle(0U),
+        	dir(true),
         	systick(systick)
         	{}
         
@@ -41,18 +44,14 @@ class HCU
 		
 		
 		// devices
-        led& can_rx_led;
+        hal_PWM& pwm;
+        uint8_t duty_cycle;
+        bool dir;
                 
         // services
         SysTick& systick; 
 		
         void process(void);
-        
-        // handle functions
-        void handle_message(void);
-        
-        void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);
-        void handle_sensor_request(Sensor::Types sT);
 };
 
 
