@@ -26,7 +26,10 @@ class HCU
         	btn_down(down),
         	limit_sw_home(home),
         	systick(systick),
-        	CM(can)
+        	CM(can),
+        	btn_requested_state(DeviceStates::NONE),
+        	can_requested_state(DeviceStates::NONE),
+        	curr_device_state(DeviceStates::NONE)
         	{}
         
         ~HCU(void)
@@ -40,6 +43,7 @@ class HCU
 			MOVING_HOME,
 			IN_HOME,
 			STOPPED,
+			NONE,
 			COUNT
 		};
 		
@@ -52,10 +56,7 @@ class HCU
         static constexpr uint8_t rx_led_time = 50U;
 		static constexpr uint8_t CAN_QUEUE_SIZE = 10U;
 	    static constexpr uint8_t FRAME_SIZE = static_cast<uint8_t>(commandFrame::Frame::COUNT);
-		
-		// control states
-		DeviceStates curr_device_state;
-		
+					
 		// devices
         led& can_rx_led;
         button& btn_up;
@@ -67,6 +68,11 @@ class HCU
         commandFrame rxBuffer;
         Responseframe txBuffer;
 	    CAN_Manager<CAN_QUEUE_SIZE, FRAME_SIZE> CM; 
+
+		// control states
+		DeviceStates btn_requested_state;
+		DeviceStates can_requested_state;
+		DeviceStates curr_device_state;
 		
 		// main process
         void process(void);
@@ -78,8 +84,16 @@ class HCU
         void handle_button_down(void);
         void handle_device_states(void);
         
+        void handle_events(void);
+        
         void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);
         void handle_sensor_request(Sensor::Types sT);
+        
+		void handle_moving_up(void);
+		void handle_moving_down(void);
+		void handle_moving_home(void);
+		void handle_in_home(void);
+		void handle_stopped(void);
 };
 
 

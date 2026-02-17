@@ -27,6 +27,10 @@ void HCU::init(void)
 	{
 		curr_device_state = DeviceStates::MOVING_HOME;
 	}
+	else 
+	{
+		curr_device_state = DeviceStates::IN_HOME;
+	}
 	
 	g_logger.info(TAG, "initialized");
 }
@@ -41,9 +45,31 @@ void HCU::process(void)
 	handle_message();
 	handle_button_up();
 	handle_button_down();
+	
+	handle_events();
+	
 	handle_device_states();
 	
-	systick.delay_ms(100);
+	systick.delay_ms(10);
+}
+
+void HCU::handle_events(void)
+{
+	if(curr_device_state == DeviceStates::MOVING_HOME)
+	{
+		return;
+	}
+	
+	if(btn_requested_state != DeviceStates::NONE)
+	{
+		curr_device_state = btn_requested_state;
+		btn_requested_state = DeviceStates::NONE;
+		can_requested_state = DeviceStates::NONE;
+		return;
+	}
+	
+	curr_device_state = can_requested_state;
+	can_requested_state = DeviceStates::NONE;
 }
 
 void HCU::handle_device_states(void)
@@ -51,14 +77,19 @@ void HCU::handle_device_states(void)
 	switch(curr_device_state)
 	{
 		case DeviceStates::MOVING_UP:
+			handle_moving_up();
 			break;
 		case DeviceStates::MOVING_DOWN:
+			handle_moving_down();
 			break;
 		case DeviceStates::MOVING_HOME:
+			handle_moving_home();
 			break;
 		case DeviceStates::IN_HOME:
+			handle_in_home();
 			break;
 		case DeviceStates::STOPPED:
+			handle_stopped();
 			break;
 		default:
 			break;
@@ -68,20 +99,16 @@ void HCU::handle_device_states(void)
 void HCU::handle_button_up(void)
 {
 	button::btn_States state = btn_up.read_state();
-	
-	if(curr_device_state == DeviceStates::MOVING_HOME)
-	{
-		return;
-	} 
-	
+		
 	switch(state)
 	{
 		case button::btn_States::PRESSED:
-			curr_device_state = DeviceStates::MOVING_UP;
+			btn_requested_state = DeviceStates::MOVING_UP;
 			break;
 		case button::btn_States::RELEASED:
 			break;
 		case button::btn_States::LONG_PRESS:
+			btn_requested_state = DeviceStates::MOVING_DOWN;
 			break;
 		default:
 			break;
@@ -92,19 +119,15 @@ void HCU::handle_button_down(void)
 {
 	button::btn_States state = btn_down.read_state();
 
-	if(curr_device_state == DeviceStates::MOVING_HOME)
-	{
-		return;
-	} 
-
 	switch(state)
 	{
 		case button::btn_States::PRESSED:
-			curr_device_state = DeviceStates::MOVING_DOWN;
+			btn_requested_state = DeviceStates::MOVING_DOWN;
 			break;
 		case button::btn_States::RELEASED:
 			break;
 		case button::btn_States::LONG_PRESS:
+			btn_requested_state = DeviceStates::MOVING_DOWN;
 			break;
 		default:
 			break;
@@ -112,8 +135,8 @@ void HCU::handle_button_down(void)
 }
 
 void HCU::handle_message(void)
-{ 
-	if(CM.read_msg(rxBuffer.get_buffer_addr()) != CM_Status::RX_BUFFER_EMPTY)
+{
+	if(CM.read_msg(rxBuffer.get_buffer_addr()) == CM_Status::RX_BUFFER_EMPTY)
 	{
 		g_logger.info(TAG, "CAN Recieve buffer empty");
 		return;
@@ -134,22 +157,20 @@ void HCU::handle_message(void)
 
 void HCU::handle_hydraulic_cmds(commandFrame::HydraulicCommands hC)
 {
-	if(curr_device_state == DeviceStates::MOVING_HOME)
-	{
-		return;
-	}
-
     switch(hC)
     {
         case commandFrame::HydraulicCommands::MOVE_UP:
-        	curr_device_state = DeviceStates::MOVING_UP;
+        	can_requested_state = DeviceStates::MOVING_UP;
             break;
         case commandFrame::HydraulicCommands::MOVE_DOWN:
-        	curr_device_state = DeviceStates::MOVING_DOWN;
+        	can_requested_state = DeviceStates::MOVING_DOWN;
             break;
         case commandFrame::HydraulicCommands::MOVE_HOME:
-        	curr_device_state = DeviceStates::MOVING_HOME;
+        	can_requested_state = DeviceStates::MOVING_HOME;
             break;
+        case commandFrame::HydraulicCommands::STOP:
+        	can_requested_state = DeviceStates::STOPPED;
+        	break;
         default:
             break;
     }
@@ -179,3 +200,36 @@ void HCU::run(void)
     g_logger.info(TAG, "-----------------------------------------------running------------------------------------------------------\r\n");
     process();
 }
+
+void HCU::handle_moving_up(void)
+{
+	
+}
+
+void HCU::handle_moving_down(void)
+{
+	
+}
+
+void HCU::handle_moving_home(void)
+{
+	if(check_dumper_home_pos())
+	{
+		curr_device_state = DeviceStates::IN_HOME;	
+	}
+	else 
+	{
+		// motor movement	
+	}	
+}
+
+void HCU::handle_in_home(void)
+{
+	
+}
+
+void HCU::handle_stopped(void)
+{
+	
+}
+

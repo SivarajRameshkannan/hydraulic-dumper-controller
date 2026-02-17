@@ -32,6 +32,7 @@ class commandFrame
             MOVE_UP = 0U,
             MOVE_DOWN,
             MOVE_HOME,
+            STOP,
             INVALID,
             COUNT
         };
@@ -105,27 +106,6 @@ class commandFrame
         inline static constexpr char TAG[] = "CMD_HANDLE";
 
 		frame_type buffer{};
-		
-/*        struct frameBuffer
-        {
-            uint8_t buffer[static_cast<size_t>(Frame::COUNT)];
-            
-		    // Read-only access (for const functions)
-		    const uint8_t& operator[](Frame f) const
-		    {
-		        return buffer[static_cast<size_t>(f)];
-		    }
-            // Writable access (used in ISR / non-const context)
-            uint8_t& operator[](Frame f)
-            {
-                return buffer[static_cast<size_t>(f)];
-            }
-
-            frameBuffer() : buffer{0x00}{}
-        };
-
-        frameBuffer frame;
-*/
 
         bool checkValidID(uint8_t& id) const
         {
