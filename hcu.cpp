@@ -14,37 +14,20 @@
 
 void HCU::init(void) const
 {
-	pwm.init();
+	_relay.init();
 	g_logger.info(TAG, "initialized");
 }
 
 void HCU::process(void)
-{	
-	if(duty_cycle > 99)
-	{
-		dir = false;
-		pwm.start();
-	}
-	
-	if(duty_cycle < 1)
-	{
-		dir = true;
-		pwm.stop();
-	}
-	
-	if(dir)
-	{
-		duty_cycle += 1;
-	}
-	else 
-	{
-		duty_cycle -= 1;
-	}
-	
-	pwm.set_duty_cycle(duty_cycle, hal_PWM::PAIR::A);
+{
+	systick.delay_ms(500);
+	_relay.on();
+		
 	g_logger.info(TAG, "Current Duty Cycle = %d", duty_cycle);
 	
-	systick.delay_ms(20);
+	systick.delay_ms(100);
+	
+	_relay.off();
 }
 
 void HCU::run(void)

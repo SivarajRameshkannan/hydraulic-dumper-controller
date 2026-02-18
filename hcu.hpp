@@ -15,14 +15,15 @@
 #include "led.hpp"
 #include "hal_timer.hpp"
 #include "command_frame.hpp"
+#include "relay.hpp"
 #include "response_frame.hpp"
 #include "systick.hpp"
 
 class HCU
 {
     public:
-        HCU(hal_PWM& _pwm, SysTick& systick)
-         : 	pwm(_pwm), 
+        HCU(relay& relay, SysTick& systick)
+         : 	_relay(relay), 
         	duty_cycle(0U),
         	dir(true),
         	systick(systick)
@@ -44,7 +45,7 @@ class HCU
 		
 		
 		// devices
-        hal_PWM& pwm;
+        relay& _relay;
         uint8_t duty_cycle;
         bool dir;
                 

@@ -4,6 +4,7 @@
  *  Created on: Feb 7, 2026
  *      Author: Sivaraj
  */
+#include "bsp_gpio.hpp"
 #include "button.hpp"
 #include "hal_pwm_ctrl.hpp"
 #include "hcu.hpp"
@@ -16,13 +17,14 @@
 using namespace BOARD_CONFIG;
 
 // LL drivers
-static bsp_PWM pwm_ctrl(PWM_INFO);
+static bsp_GPIO relay_gpio(RELAY_GPIO, RELAY_CONFIG);
+static relay relay_module(relay_gpio, true);
 
 static SysTick SysTick;
 
 // devices
 
-static HCU hcu_instance(pwm_ctrl, SysTick);
+static HCU hcu_instance(relay_module, SysTick);
 
 extern "C" void HCU_init_wrapper(void)
 {

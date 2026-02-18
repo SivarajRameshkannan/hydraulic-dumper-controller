@@ -27,25 +27,18 @@ extern "C"
 
 namespace BOARD_CONFIG
 {
-    inline pwm_struct PWM_INFO = 
-    {
-		.pin_a = GPIO_NUM_2,
-		.io_a = MCPWM0A,
-		.pin_b = GPIO_NUM_NC,
-		.io_b = MCPWM0A,
-
-		.unit = MCPWM_UNIT_0,	 
-		.source = MCPWM_TIMER_0,
-
-        .config = {
-            1000,              // frequency
-            0,                 // cmpr_a
-            0,                 // cmpr_b
-            MCPWM_DUTY_MODE_0, // duty_mode
-            MCPWM_UP_COUNTER   // counter_mode
-        },
+	
+	constexpr gpio_num_t RELAY_GPIO = GPIO_NUM_2;
+	
+	inline gpio_config_t RELAY_CONFIG = 
+	{
+		.pin_bit_mask = (1ULL << RELAY_GPIO),
+		.mode = GPIO_MODE_OUTPUT,
+		.pull_up_en = GPIO_PULLUP_ENABLE,
+		.pull_down_en = GPIO_PULLDOWN_DISABLE,
+		.intr_type = GPIO_INTR_DISABLE
 	};
-    
+	
 };
 
 #endif /* HAL_STM32F103C8T6_BOARD_CONFIG_HPP_ */
