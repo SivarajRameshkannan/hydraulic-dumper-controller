@@ -29,12 +29,14 @@ class cylinder
 		void move_up(void)
 		{
 			_pwm.set_duty_cycle(50U, hal_PWM::PAIR::A);
+			_pwm.start();
 			_relay_up.on();
 		}
 		
 		void move_down(void)
 		{
 			_pwm.set_duty_cycle(100U, hal_PWM::PAIR::A);
+			_pwm.start();			
 			_relay_down.on();			
 		}
 		
@@ -43,6 +45,13 @@ class cylinder
 			// TO DO: add home detection in this scope.
 			_pwm.set_duty_cycle(100U, hal_PWM::PAIR::A);
 			_relay_down.on();			
+		}
+		
+		void move_stop(void)
+		{
+			_pwm.stop();			
+			_relay_down.off();
+			_relay_up.off();
 		}
 		
 	private:
