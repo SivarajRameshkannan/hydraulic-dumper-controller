@@ -20,11 +20,10 @@
 class HCU
 {
     public:
-        HCU(led& led, button& up, button& down, button& home, hal_CAN& can, SysTick& systick)
+        HCU(led& led, button& up, button& down, hal_CAN& can, SysTick& systick)
          : 	can_rx_led(led), 
         	btn_up(up), 
         	btn_down(down),
-        	limit_sw_home(home),
         	systick(systick),
         	CM(can),
         	btn_requested_state(DeviceStates::NONE),
@@ -61,7 +60,6 @@ class HCU
         led& can_rx_led;
         button& btn_up;
         button& btn_down;
-        button& limit_sw_home;
                 
         // services
         SysTick& systick; 
@@ -76,10 +74,6 @@ class HCU
 		
 		// main process
         void process(void);
-        bool check_dumper_in_home_pos(void) const 
-        { 
-			return (this->limit_sw_home.read_state() != button::btn_States::RELEASED);
-		};
         
         // handle functions
         void handle_message(void);

@@ -32,7 +32,7 @@ static button btn_up(gpio_up_button, SysTick);
 static button btn_down(gpio_down_button, SysTick);
 static button limit_sw_home(gpio_home, SysTick);
 
-static HCU hcu_instance(led_can_rx, btn_up, btn_down, limit_sw_home, CAN, SysTick);
+static HCU hcu_instance(led_can_rx, btn_up, btn_down, CAN, SysTick);
 
 extern "C" void HCU_init_wrapper(void)
 {

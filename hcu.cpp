@@ -18,11 +18,11 @@ void HCU::init(void)
 	
 	btn_up.init();
 	btn_down.init();
-	limit_sw_home.init();
 	CM.init();
 	
 	systick.delay_ms(100);
-	
+
+#if 0	
 	if(!check_dumper_in_home_pos())
 	{
 		curr_device_state = DeviceStates::MOVING_HOME;
@@ -31,6 +31,7 @@ void HCU::init(void)
 	{
 		curr_device_state = DeviceStates::IN_HOME;
 	}
+#endif
 	
 	g_logger.info(TAG, "initialized");
 }
@@ -39,7 +40,6 @@ void HCU::process(void)
 {
 	btn_up.process();
 	btn_down.process();
-	limit_sw_home.process();
 	CM.process();
 	
 	handle_message();
@@ -223,6 +223,7 @@ void HCU::handle_moving_down(void)
 
 void HCU::handle_moving_home(void)
 {
+#if 0
 	if(check_dumper_in_home_pos())
 	{
 		curr_device_state = DeviceStates::IN_HOME;	
@@ -231,6 +232,7 @@ void HCU::handle_moving_home(void)
 	{
 		// motor movement	
 	}	
+#endif
 }
 
 void HCU::handle_in_home(void)
