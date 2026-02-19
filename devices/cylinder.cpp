@@ -11,6 +11,7 @@ void cylinder::init(void)
 	_pwm.init();
 	_relay_up.init();
 	_relay_down.init();
+	_limit_sw.init();
 	
 	_pwm.set_period(1000U);
 	_pwm.stop();
