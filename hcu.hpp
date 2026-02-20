@@ -10,6 +10,7 @@
 
 #include "button.hpp"
 #include "can_manager.hpp"
+#include "cylinder.hpp"
 #include "hal_can.hpp"
 #include "led.hpp"
 #include "hal_timer.hpp"
@@ -20,10 +21,11 @@
 class HCU
 {
     public:
-        HCU(led& led, button& up, button& down, hal_CAN& can, SysTick& systick)
+        HCU(led& led, button& up, button& down, cylinder& cylinder, hal_CAN& can, SysTick& systick)
          : 	can_rx_led(led), 
         	btn_up(up), 
         	btn_down(down),
+        	_cylinder(cylinder), 
         	systick(systick),
         	CM(can),
         	btn_requested_state(DeviceStates::NONE),
@@ -60,7 +62,8 @@ class HCU
         led& can_rx_led;
         button& btn_up;
         button& btn_down;
-                
+        cylinder& _cylinder;
+               
         // services
         SysTick& systick; 
         commandFrame rxBuffer;

@@ -18,6 +18,7 @@ void HCU::init(void)
 	
 	btn_up.init();
 	btn_down.init();
+	_cylinder.init();
 	CM.init();
 	
 	systick.delay_ms(100);
