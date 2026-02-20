@@ -22,7 +22,7 @@ class cylinder
 			_relay_down(relay_down), 
 			_limit_sw(limit_sw),
 			_systick(systick),
-			_motion_state(motion_state::IDLE), 
+			_motion_state(motion_state::HOMING), 
 			_prev_state(motion_state::IDLE),
 			state_changed(false),
 			motion_start_time(0)
