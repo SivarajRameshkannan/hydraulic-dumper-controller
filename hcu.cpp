@@ -22,17 +22,6 @@ void HCU::init(void)
 	CM.init();
 	
 	systick.delay_ms(100);
-
-#if 0	
-	if(!check_dumper_in_home_pos())
-	{
-		curr_device_state = DeviceStates::MOVING_HOME;
-	}
-	else 
-	{
-		curr_device_state = DeviceStates::IN_HOME;
-	}
-#endif
 	
 	g_logger.info(TAG, "initialized");
 }
@@ -41,6 +30,7 @@ void HCU::process(void)
 {
 	btn_up.process();
 	btn_down.process();
+	_cylinder.process();
 	CM.process();
 	
 	handle_message();
