@@ -33,19 +33,13 @@ void HCU::process(void)
 	_cylinder.process();
 	CM.process();
 	
-	handle_message();
-	handle_button_up();
-	handle_button_down();
-	
-	handle_events();
-	
-	handle_device_states();
-	
 	systick.delay_ms(10);
 }
 
 void HCU::handle_events(void)
 {
+
+#if 0
 	if(curr_device_state == DeviceStates::MOVING_HOME)
 	{
 	    if(btn_requested_state == DeviceStates::STOPPED ||
@@ -69,10 +63,12 @@ void HCU::handle_events(void)
 		curr_device_state = can_requested_state;
 		can_requested_state = DeviceStates::NONE;	
 	}
+#endif
 }
 
 void HCU::handle_device_states(void)
 {
+#if 0
 	switch(curr_device_state)
 	{
 		case DeviceStates::MOVING_UP:
@@ -93,12 +89,14 @@ void HCU::handle_device_states(void)
 		default:
 			break;
 	}
+#endif
 }
 
 void HCU::handle_button_up(void)
 {
 	button::btn_States state = btn_up.read_state();
-		
+
+#if 0		
 	switch(state)
 	{
 		case button::btn_States::PRESSED:
@@ -113,12 +111,14 @@ void HCU::handle_button_up(void)
 		default:
 			break;
 	}
+#endif
 }
 
 void HCU::handle_button_down(void)
 {
 	button::btn_States state = btn_down.read_state();
 
+#if 0
 	switch(state)
 	{
 		case button::btn_States::PRESSED:
@@ -133,6 +133,7 @@ void HCU::handle_button_down(void)
 		default:
 			break;
 	}
+#endif
 }
 
 void HCU::handle_message(void)
@@ -143,6 +144,7 @@ void HCU::handle_message(void)
 		return;
 	}
 
+#if 0
 	switch(rxBuffer.get_id())
 	{
 		case commandFrame::ID::HYDRAULIC_COMMAND:
@@ -154,10 +156,12 @@ void HCU::handle_message(void)
 		default:
 			break;
 	}
+#endif
 }
 
 void HCU::handle_hydraulic_cmds(commandFrame::HydraulicCommands hC)
 {
+#if 0
     switch(hC)
     {
         case commandFrame::HydraulicCommands::MOVE_UP:
@@ -175,6 +179,7 @@ void HCU::handle_hydraulic_cmds(commandFrame::HydraulicCommands hC)
         default:
             break;
     }
+#endif
 }
 
 void HCU::handle_sensor_request(Sensor::Types sT)

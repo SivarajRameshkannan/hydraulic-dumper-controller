@@ -22,7 +22,7 @@ class cylinder
 			_relay_down(relay_down), 
 			_limit_sw(limit_sw),
 			_systick(systick),
-			_motion_state(motion_state::IDLE), 
+			_motion_state(motion_state::HOMING), 
 			_prev_state(motion_state::IDLE),
 			state_changed(false),
 			motion_start_time(0)
@@ -44,6 +44,7 @@ class cylinder
 		void move_down(void) { _motion_state = motion_state::MOVING_DOWN; }
 		void move_stop(void) { _motion_state = motion_state::IDLE; }
 		void move_home(void) { _motion_state = motion_state::HOMING; }
+		motion_state get_current_state(void) { return _motion_state; }
 		
 	private:
 		static constexpr uint16_t MOTION_TIMEOUT_MS  = 4000U;

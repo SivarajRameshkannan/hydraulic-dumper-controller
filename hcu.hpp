@@ -27,26 +27,12 @@ class HCU
         	btn_down(down),
         	_cylinder(cylinder), 
         	systick(systick),
-        	CM(can),
-        	btn_requested_state(DeviceStates::NONE),
-        	can_requested_state(DeviceStates::NONE),
-        	curr_device_state(DeviceStates::NONE)
+        	CM(can)
         	{}
         
         ~HCU(void)
         {
         };
-
-		enum class DeviceStates : uint8_t
-		{
-			MOVING_UP = 0U,
-			MOVING_DOWN,
-			MOVING_HOME,
-			IN_HOME,
-			STOPPED,
-			NONE,
-			COUNT
-		};
 		
         void init(void);
         void run(void);
@@ -68,12 +54,7 @@ class HCU
         SysTick& systick; 
         commandFrame rxBuffer;
         Responseframe txBuffer;
-	    CAN_Manager<CAN_QUEUE_SIZE, FRAME_SIZE> CM; 
-
-		// control states
-		DeviceStates btn_requested_state;
-		DeviceStates can_requested_state;
-		DeviceStates curr_device_state;
+	    CAN_Manager<CAN_QUEUE_SIZE, FRAME_SIZE> CM;
 		
 		// main process
         void process(void);
