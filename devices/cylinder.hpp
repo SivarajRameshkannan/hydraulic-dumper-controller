@@ -44,6 +44,7 @@ class cylinder
 		void move_down(void) { _motion_state = motion_state::MOVING_DOWN; }
 		void move_stop(void) { _motion_state = motion_state::IDLE; }
 		void move_home(void) { _motion_state = motion_state::HOMING; }
+		motion_state get_current_state(void) { return _motion_state; }
 		
 	private:
 		static constexpr uint16_t MOTION_TIMEOUT_MS  = 4000U;
