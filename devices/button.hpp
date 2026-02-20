@@ -25,11 +25,19 @@ public:
           debounce_pending(false),
           debounce_start_time(0),
           press_start_time(0),
-		  btn_state(btn_States::RELEASED)
+		  btn_state(btn_States::RELEASED),
+		  cb_pressed(nullptr),
+		  cb_released(nullptr),
+		  cb_long_pressed(nullptr),
+		  ctx_pressed(nullptr),
+		  ctx_released(nullptr),
+		  ctx_long_pressed(nullptr)
     {
 	}
 	
 	~button(void) = default;
+	
+	using callback = void(*)(void *);
 	
 	enum class btn_States : uint8_t
 	{
@@ -40,13 +48,18 @@ public:
 
     void init(void);
     void process(void);
-    btn_States read_state(void) const;
+    void register_cb_pressed(callback cb, void* ctx) { cb_pressed = cb; ctx_pressed = ctx; }
+    void register_cb_released(callback cb, void* ctx) { cb_released = cb; ctx_released = ctx; }
+    void register_cb_long_pressed(callback cb, void* ctx) { cb_long_pressed = cb; ctx_long_pressed = ctx; }
+
     static void on_intr(void* ctx);
 
 private:
+    static constexpr char TAG[] = "button";
+
     hal_GPIO& gpio;
     SysTick& systick;
-
+    
     bool curr_state;
     
     const uint8_t _debounce_period;
@@ -59,7 +72,16 @@ private:
 	
 	std::atomic<btn_States> btn_state;
 	
-    static constexpr char TAG[] = "button";
+	callback cb_pressed;
+	callback cb_released;
+	callback cb_long_pressed;
+	
+	void* ctx_pressed;
+	void* ctx_released;
+	void* ctx_long_pressed;	
+	
+    btn_States read_state(void) const;
+    void handle_events(void);
 };
 
 

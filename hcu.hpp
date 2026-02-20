@@ -33,6 +33,10 @@ class HCU
         void init(void) const;
         void run(void);
 
+        static void pressed(void* ctx);
+        static void released(void* ctx);
+        static void long_press(void* ctx);
+        
     private:
     	//constants
         static constexpr char TAG[] = "HCU";
@@ -51,12 +55,6 @@ class HCU
         Responseframe txBuffer;
 		
         void process(void);
-        
-        // handle functions
-        void handle_message(void);
-        
-        void handle_hydraulic_cmds(commandFrame::HydraulicCommands hC);
-        void handle_sensor_request(Sensor::Types sT);
 };
 
 

@@ -63,9 +63,40 @@ void button::process(void)
         
         gpio.enable_intr();
     }
+    
+    handle_events();
 }
 
 button::btn_States button::read_state(void) const
 {
 	return btn_state;
+}
+
+void button::handle_events(void)
+{
+	callback cb = nullptr;
+	void* ctx = nullptr;
+	
+	switch(read_state())
+	{
+		case btn_States::PRESSED:
+			cb = cb_pressed;
+			ctx = ctx_pressed;
+			break;
+		case btn_States::RELEASED:
+			cb = cb_released;
+			ctx = ctx_released;
+			break;
+		case btn_States::LONG_PRESS:
+			cb = cb_long_pressed;
+			ctx = ctx_long_pressed;
+			break;
+		default:
+			break;	
+	}
+	
+	if(cb)
+	{
+		cb(ctx);
+	}
 }
