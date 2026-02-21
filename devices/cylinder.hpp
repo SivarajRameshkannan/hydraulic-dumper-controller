@@ -25,6 +25,7 @@ class cylinder
 			_motion_state(motion_state::HOMING), 
 			_prev_state(motion_state::IDLE),
 			state_changed(false),
+			home_reached(false),
 			motion_start_time(0)
 			{}
 			
@@ -56,8 +57,9 @@ class cylinder
 		SysTick& _systick;
 		
 		motion_state _motion_state;
-		motion_state _prev_state;		
-		bool state_changed;
+		motion_state _prev_state;
+		bool state_changed;		
+		bool home_reached;
 		
 		uint64_t motion_start_time;
 		
@@ -66,6 +68,9 @@ class cylinder
 		void handle_move_home(void);
 		void handle_move_stop(void);
 		void handle_timeout(void);
+
+		static void in_home(void* ctx);
+		static void not_in_home(void* ctx);
 };
 
 #endif /* MANAGED_COMPONENTS_HCU_DEVICES_HYDRAULIC_CONTROLLER_HPP_ */
