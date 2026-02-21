@@ -35,6 +35,7 @@ void button::process(void)
             if ((held_time > _long_press_period) && (btn_state != btn_States::LONG_PRESS))
             {
 				btn_state = btn_States::LONG_PRESS;
+				handle_events();
             }
         }
         return;
@@ -63,9 +64,27 @@ void button::process(void)
         
         gpio.enable_intr();
     }
+    
+    handle_events();
 }
 
 button::btn_States button::read_state(void) const
 {
 	return btn_state;
+}
+
+void button::register_btn_callback(callback cb, void* ctx, btn_States state)
+{
+	_cb[static_cast<size_t>(state)] = cb; 
+	_ctx[static_cast<size_t>(state)] = ctx;
+}
+
+void button::handle_events(void)
+{	
+	size_t state = static_cast<size_t>(read_state());
+	
+	if(_cb[state])
+	{
+		_cb[state](_ctx[state]);
+	}
 }

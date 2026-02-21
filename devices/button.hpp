@@ -11,6 +11,7 @@
 #include "hal_gpio.hpp"
 #include "systick.hpp"
 #include <atomic>
+#include <array>
 
 class button
 {
@@ -31,22 +32,27 @@ public:
 	
 	~button(void) = default;
 	
+	using callback = void(*)(void *);
+	
 	enum class btn_States : uint8_t
 	{
 		PRESSED = 0U,
 		RELEASED,
-		LONG_PRESS
+		LONG_PRESS,
+		COUNT
 	};
 
     void init(void);
     void process(void);
-    btn_States read_state(void) const;
+	void register_btn_callback(callback cb, void* ctx, btn_States state);
     static void on_intr(void* ctx);
 
 private:
+    static constexpr char TAG[] = "button";
+
     hal_GPIO& gpio;
     SysTick& systick;
-
+    
     bool curr_state;
     
     const uint8_t _debounce_period;
@@ -59,7 +65,11 @@ private:
 	
 	std::atomic<btn_States> btn_state;
 	
-    static constexpr char TAG[] = "button";
+	std::array<callback, static_cast<size_t>(btn_States::COUNT)> _cb{nullptr};
+	std::array<void*, static_cast<size_t>(btn_States::COUNT)> _ctx{nullptr};
+	
+    btn_States read_state(void) const;
+    void handle_events(void);
 };
 
 
