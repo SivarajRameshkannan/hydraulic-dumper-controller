@@ -16,9 +16,9 @@ void HCU::init(void) const
 	can_rx_led.init();
 	
 	btn.init();	
-	btn.register_cb_long_pressed(HCU::pressed, (void*) this);
-	btn.register_cb_long_pressed(HCU::released, (void*) this);
-	btn.register_cb_long_pressed(HCU::long_press, (void*) this);
+	btn.register_btn_callback(HCU::pressed, (void*) this, button::btn_States::PRESSED);
+	btn.register_btn_callback(HCU::released, (void*) this, button::btn_States::RELEASED);
+	btn.register_btn_callback(HCU::long_press, (void*) this, button::btn_States::LONG_PRESS);
 	g_logger.info(TAG, "initialized");
 } 
 
