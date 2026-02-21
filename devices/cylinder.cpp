@@ -5,6 +5,7 @@
  *      Author: Sivaraj
  */
 #include "cylinder.hpp"
+#include "button.hpp"
 
 void cylinder::init(void)
 {
@@ -12,6 +13,9 @@ void cylinder::init(void)
 	_relay_up.init();
 	_relay_down.init();
 	_limit_sw.init();
+	_limit_sw.register_btn_callback(cylinder::in_home, (void*)this, button::btn_States::PRESSED);
+	_limit_sw.register_btn_callback(cylinder::in_home, (void*)this, button::btn_States::LONG_PRESS);
+	_limit_sw.register_btn_callback(cylinder::not_in_home, (void*)this, button::btn_States::RELEASED);
 	
 	_pwm.set_period(1000U);
 	_pwm.stop();
@@ -78,7 +82,7 @@ void cylinder::handle_move_home(void)
 	    _relay_down.on();					
 	}
 	
-	if(_limit_sw.read_state() != button::btn_States::RELEASED)
+	if(home_reached)
 	{
 		_motion_state = motion_state::IDLE;
 		return;
@@ -103,3 +107,16 @@ void cylinder::handle_timeout(void)
 		_motion_state = motion_state::IDLE;
 	}
 }
+
+void cylinder::in_home(void* ctx)
+{ 
+	auto* self = static_cast<cylinder*>(ctx);
+	self->home_reached = true; 
+}
+
+void cylinder::not_in_home(void* ctx)
+{ 
+	auto* self = static_cast<cylinder*>(ctx);
+	self->home_reached = false; 
+}
+
