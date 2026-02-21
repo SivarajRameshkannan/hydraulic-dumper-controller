@@ -94,9 +94,9 @@ void HCU::handle_device_states(void)
 
 void HCU::handle_button_up(void)
 {
+#if 0		
 	button::btn_States state = btn_up.read_state();
 
-#if 0		
 	switch(state)
 	{
 		case button::btn_States::PRESSED:
@@ -116,9 +116,9 @@ void HCU::handle_button_up(void)
 
 void HCU::handle_button_down(void)
 {
+#if 0
 	button::btn_States state = btn_down.read_state();
 
-#if 0
 	switch(state)
 	{
 		case button::btn_States::PRESSED:

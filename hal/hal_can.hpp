@@ -8,26 +8,16 @@
 #ifndef APP_HAL_HAL_CAN_HPP_
 #define APP_HAL_HAL_CAN_HPP_
 
-#include "hal_Intr.hpp"
+#include "hal_COM.hpp"
 #include <cstdint>
 #include <cstddef>
 
-class hal_CAN : public hal_Intruppt
+class hal_CAN : public hal_COM
 {
-	public:
-		enum class CAN_status : uint8_t
-		{
-			OK = 0,
-			FAILURE,
-			MAX_STATUS
-		};
-		
+	public:		        	
 		hal_CAN() = default;
 		virtual ~hal_CAN() = default;
-
-        virtual void init(void) const = 0;
-        virtual CAN_status send(uint8_t*, size_t size) const = 0;
-        virtual CAN_status recv(uint8_t*, size_t size) const = 0;
+	
 	private:	
 };
 

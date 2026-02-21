@@ -10,38 +10,34 @@
 
 #include <cstddef>
 #include <cstdint>
+#include "hal_COM.hpp"
 #include "hal_can.hpp"
 
 class bsp_CAN : public hal_CAN
 {
-    public:
-        using Callback = void (*)(void* ctx);
+    public:        
         bsp_CAN() = default;
         ~bsp_CAN(void) = default;
 
-        void init(void) const
+        void init(void) const override
         {
+			// implement init function
         }
-
-        CAN_status send(uint8_t*, size_t size) const
-        {
-			return CAN_status::OK;
-        }
-
-        CAN_status recv(uint8_t*, size_t size) const
-        {
-			return CAN_status::OK;
-        }
-
-		void enable_intr(void) const
+		
+		void process(void) override
 		{
-			
+			hal_COM::process();
 		}
 		
-		void disable_intr(void) const
-		{
-			
-		} 
+        COM_status send(uint8_t*, size_t size) const override
+        {
+			return COM_status::OK;
+        }
+
+        COM_status recv(uint8_t*, size_t size) const override
+        {
+			return COM_status::OK;
+        }
 		
     private:
 };
