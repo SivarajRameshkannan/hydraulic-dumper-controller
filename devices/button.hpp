@@ -45,7 +45,6 @@ public:
     void init(void);
     void process(void);
 	void register_btn_callback(callback cb, void* ctx, btn_States state);
-    static void on_intr(void* ctx);
 
 private:
     static constexpr char TAG[] = "button";
@@ -70,6 +69,7 @@ private:
 	
     btn_States read_state(void) const;
     void handle_events(void);
+    static void on_intr(void* ctx);
 };
 
 
